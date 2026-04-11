@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sip &amp; Slay - Creator Guide</title>
+<style>
+:root {
+  --bg: #F4F2EE;
+  --bg-alt: #EDEAE4;
+  --card: #FFFFFF;
+  --text: #37352F;
+  --text-mid: #6B6B6B;
+  --text-light: #9B9B9B;
+  --border: #E3E0D8;
+  --accent: #D4785C;
+  --accent-light: #F5EDE9;
+  --green: #5BA97B;
+  --green-light: #EAF5EE;
+  --red: #CC5F5F;
+  --red-light: #FDF0F0;
+  --blue: #5B8FD4;
+  --blue-light: #EBF2FB;
+  --whatsapp: #25D366;
+  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ====== TOP NAV ====== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+.topbar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 0;
+}
+.brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.brand-date {
+  font-size: 13px;
+  color: var(--text-light);
+  font-weight: 400;
+}
+.topbar-status {
+  font-size: 12px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.status-dot.on { background: var(--green); }
+
+.nav-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 8px 0 0;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-mid);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active {
+  color: var(--text);
+  font-weight: 600;
+  border-bottom-color: var(--accent);
+}
+
+/* ====== MAIN ====== */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 28px 60px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+.page-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.page-header .subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-top: 3px;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ====== SPLIT VIEW (Picks) ====== */
+.split-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.split-col h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.split-col .col-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-light);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ====== CARDS ====== */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+  border: 1px solid var(--border);
+}
+.card:hover { box-shadow: var(--shadow-lg); }
+.card.picked { border-left: 3px solid var(--green); }
+.card.skipped { opacity: 0.3; }
+
+.type-pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.type-pill.short { background: var(--accent-light); color: var(--accent); }
+.type-pill.podcast { background: var(--blue-light); color: var(--blue); }
+
+/* Suggestion cards */
+.s-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.s-rank {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-light);
+  min-width: 20px;
+}
+.s-score {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg-alt);
+  color: var(--text-mid);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.s-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.s-meta {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+.s-duration { font-weight: 600; color: var(--blue); }
+.s-angle {
+  font-size: 13px;
+  font-style: italic;
+  background: var(--bg-alt);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+  line-height: 1.4;
+  color: var(--text-mid);
+}
+.s-status {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+}
+.s-status.picked { color: var(--green); }
+.s-status.skipped { color: var(--red); }
+
+.s-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* ====== BUTTONS ====== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.12s;
+  text-decoration: none;
+}
+.btn:hover {
+  background: var(--bg-alt);
+  border-color: var(--text-light);
+  color: var(--text);
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn-watch {
+  background: var(--red-light);
+  color: var(--red);
+  border-color: transparent;
+}
+.btn-watch:hover { background: #f9e0e0; }
+
+.btn-pick {
+  background: var(--green-light);
+  color: var(--green);
+  border-color: transparent;
+}
+.btn-pick:hover { background: #d4eedd; }
+
+.btn-skip {
+  background: var(--bg-alt);
+  color: var(--text-light);
+  border-color: transparent;
+}
+.btn-skip:hover { background: var(--border); color: var(--text-mid); }
+
+.btn-wa {
+  background: #E8FAF0;
+  color: var(--whatsapp);
+  border-color: transparent;
+}
+.btn-wa:hover { background: #d0f5e1; }
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  border-color: transparent;
+}
+.btn-primary:hover { background: #c06a4e; }
+
+.btn-secondary {
+  background: var(--bg-alt);
+  color: var(--text-mid);
+  border-color: transparent;
+}
+.btn-secondary:hover { background: var(--border); }
+
+.btn-danger {
+  color: var(--red);
+  background: var(--red-light);
+  border-color: transparent;
+}
+
+.btn-accent-outline {
+  color: var(--accent);
+  background: var(--accent-light);
+  border-color: transparent;
+}
+
+.btn-full { width: 100%; justify-content: center; margin-top: 14px; }
+
+/* ====== QUEUE ====== */
+.queue-section { margin-bottom: 28px; }
+.queue-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.queue-item {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.queue-item.editing-item {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-light);
+}
+.qi-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.qi-title { font-size: 14px; font-weight: 600; flex: 1; }
+.qi-channel { font-size: 12px; color: var(--text-light); margin-bottom: 8px; }
+.qi-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+.empty-state h3 { font-size: 16px; color: var(--text-mid); margin-bottom: 6px; }
+
+/* ====== PROGRESS ====== */
+.progress-bar {
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.progress-text { font-size: 11px; color: var(--text-light); text-align: right; }
+
+/* ====== CHECKLIST ====== */
+.checklist-banner {
+  background: var(--accent-light);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+}
+.checklist-group {
+  max-width: 640px;
+  margin-bottom: 24px;
+}
+.checklist-group h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item input[type="checkbox"] {
+  width: 18px; height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--green);
+  cursor: pointer;
+}
+.check-item.done label { text-decoration: line-through; color: var(--text-light); }
+
+.warning-box {
+  background: #FEF8F0;
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 14px;
+  margin-top: 20px;
+  line-height: 1.5;
+  max-width: 640px;
+  color: var(--text-mid);
+}
+.warning-box strong { color: var(--accent); }
+
+/* ====== HASHTAGS ====== */
+.hashtag-layout { max-width: 640px; }
+.hashtag-group { margin-bottom: 20px; }
+.hashtag-group h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--card);
+  color: var(--text-mid);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.12s;
+  user-select: none;
+}
+.pill:hover { border-color: var(--text-light); }
+.pill.selected {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.hashtag-counter {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 0;
+  color: var(--text-mid);
+}
+.hashtag-counter.over { color: var(--red); }
+.hashtag-output {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  word-break: break-all;
+  min-height: 60px;
+  margin: 12px 0;
+}
+.hashtag-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ====== CAPTIONS ====== */
+.captions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 8px;
+}
+.caption-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.caption-text { flex: 1; font-size: 14px; line-height: 1.5; }
+.caption-label { font-size: 11px; color: var(--text-light); margin-bottom: 3px; }
+
+/* ====== TIMES ====== */
+.times-table {
+  width: 100%;
+  max-width: 480px;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.times-table th {
+  background: var(--bg-alt);
+  color: var(--text);
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+}
+.times-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.times-table tr:last-child td { border-bottom: none; }
+.peak { font-weight: 600; color: var(--accent); }
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.info-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 18px;
+}
+.info-card strong { display: block; font-size: 14px; margin-bottom: 6px; }
+.info-card p { font-size: 13px; color: var(--text-mid); line-height: 1.5; }
+
+/* ====== TIPS ====== */
+.tips-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 4px 18px;
+  max-width: 640px;
+}
+.tip-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  background: var(--bg-alt);
+  color: var(--text-mid);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.tip-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.tip-item:last-child { border-bottom: none; }
+
+.dos-donts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+  max-width: 640px;
+}
+.dos-donts .col {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 18px;
+}
+.dos-donts .col h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.dos-donts .col.do h3 { color: var(--green); }
+.dos-donts .col.dont h3 { color: var(--red); }
+.dos-donts li {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 3px;
+  list-style: none;
+  color: var(--text-mid);
+}
+
+/* ====== OVERLAY ====== */
+.overlay-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.phone-frame {
+  width: 200px;
+  height: 356px;
+  border: 2px solid var(--text-mid);
+  border-radius: 24px;
+  position: relative;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+.phone-frame .overlay-zone {
+  position: absolute;
+  bottom: 56px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border: 2px dashed var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: var(--accent);
+  text-align: center;
+  background: rgba(212,120,92,0.2);
+}
+.phone-frame .text-zone {
+  position: absolute;
+  bottom: 115px;
+  left: 12px;
+  right: 68px;
+  padding: 6px;
+  border: 2px dashed var(--blue);
+  border-radius: 8px;
+  font-size: 8px;
+  color: var(--blue);
+  text-align: center;
+  background: rgba(91,143,212,0.15);
+}
+.phone-frame .caption-zone {
+  position: absolute;
+  bottom: 16px;
+  left: 12px;
+  right: 12px;
+  padding: 6px;
+  border: 2px dashed rgba(255,255,255,0.5);
+  border-radius: 6px;
+  font-size: 7px;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+}
+
+.reaction-group { margin-bottom: 16px; }
+.reaction-group h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+.reaction-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.reaction-pill {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.reaction-pill:hover { border-color: var(--accent); color: var(--accent); }
+.reaction-pill:active { background: var(--accent); color: white; }
+
+/* ====== 30-DAY PLAN ====== */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+.week-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 20px;
+}
+.week-card h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.week-card .goal { font-size: 13px; color: var(--text-light); margin-bottom: 10px; }
+.week-card ul { padding-left: 18px; font-size: 14px; line-height: 1.8; color: var(--text-mid); }
+
+.checkpoint {
+  background: var(--accent);
+  color: white;
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-top: 16px;
+  text-align: center;
+}
+.checkpoint h3 { font-size: 17px; margin-bottom: 6px; }
+.checkpoint p { font-size: 14px; opacity: 0.9; line-height: 1.5; }
+
+/* ====== COLLAPSIBLE ====== */
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.collapsible-header .arrow {
+  transition: transform 0.2s;
+  font-size: 11px;
+  color: var(--text-light);
+}
+.collapsible-header.open .arrow { transform: rotate(90deg); }
+.collapsible-body { display: none; }
+.collapsible-body.open { display: block; }
+
+/* ====== SECTION LABEL ====== */
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+.section-label:first-child { margin-top: 0; }
+
+/* ====== TOAST ====== */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 300;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* ====== MOBILE ====== */
+@media (max-width: 768px) {
+  .topbar-inner { padding: 0 16px; }
+  .main { padding: 16px 16px 60px; }
+  .split-view {
+    grid-template-columns: 1fr;
+  }
+  .overlay-layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .dos-donts { grid-template-columns: 1fr; }
+  .plan-grid { grid-template-columns: 1fr; }
+  .captions-grid { grid-template-columns: 1fr; }
+  .page-header h2 { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-top">
+      <div>
+        <span class="brand">Sip &amp; Slay</span>
+        <span class="brand-date" id="brandDate"></span>
+      </div>
+      <div class="topbar-status">
+        <span class="status-dot" id="serverDot"></span>
+        <span id="serverLabel">Offline</span>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="picks">Picks</button>
+      <button class="nav-tab" data-tab="queue">Queue</button>
+      <button class="nav-tab" data-tab="checklist">Checklist</button>
+      <button class="nav-tab" data-tab="hashtags">Hashtags</button>
+      <button class="nav-tab" data-tab="captions">Captions</button>
+      <button class="nav-tab" data-tab="times">Times</button>
+      <button class="nav-tab" data-tab="tips">Tips</button>
+      <button class="nav-tab" data-tab="overlay">Overlay</button>
+      <button class="nav-tab" data-tab="plan">30-Day Plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- Picks -->
+  <div class="tab-content active" id="tab-picks">
+    <div class="page-header">
+      <h2>Today's Picks</h2>
+      <div class="subtitle">Pick your favourites to add them to your editing queue</div>
+    </div>
+    <div class="split-view">
+      <div class="split-col">
+        <h3><span class="type-pill short">Shorts</span> Trending Clips <span class="col-count" id="shortsCount"></span></h3>
+        <div id="shortsList"></div>
+      </div>
+      <div class="split-col">
+        <h3><span class="type-pill podcast">Podcast</span> Full Episodes <span class="col-count" id="podcastsCount"></span></h3>
+        <div id="podcastsList"></div>
+      </div>
+    </div>
+    <button class="btn btn-wa btn-full" onclick="shareAllPicks()" style="max-width:360px;margin:20px auto 0;display:flex">Share all picks on WhatsApp</button>
+  </div>
+
+  <!-- Queue -->
+  <div class="tab-content" id="tab-queue">
+    <div class="page-header">
+      <h2>My Queue</h2>
+      <div class="subtitle">Track what you're editing and what's next</div>
+    </div>
+    <div class="queue-section">
+      <div class="queue-label">Currently Editing</div>
+      <div id="editingList"></div>
+    </div>
+    <div class="queue-section">
+      <div class="queue-label">Saved for Later</div>
+      <div id="savedList"></div>
+    </div>
+    <div class="queue-section">
+      <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <div class="queue-label" style="margin:0">Posted</div>
+        <span class="arrow">&#9654;</span>
+      </div>
+      <div class="collapsible-body" id="postedList"></div>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="tab-content" id="tab-checklist">
+    <div class="page-header">
+      <h2>Checklist</h2>
+      <div class="subtitle">Step-by-step for the clip you're editing</div>
+    </div>
+    <div id="checklistContent"></div>
+  </div>
+
+  <!-- Hashtags -->
+  <div class="tab-content" id="tab-hashtags">
+    <div class="page-header">
+      <h2>Hashtags</h2>
+      <div class="subtitle">Tap to select, copy the set</div>
+    </div>
+    <div class="hashtag-layout">
+      <div class="hashtag-counter" id="hashtagCounter">0 / 20 selected</div>
+      <div class="hashtag-group">
+        <h3>Big (1-2 for discovery)</h3>
+        <div class="pills" id="pills-big"></div>
+      </div>
+      <div class="hashtag-group">
+        <h3>Medium (5-8, reach drivers)</h3>
+        <div class="pills" id="pills-medium"></div>
+      </div>
+      <div class="hashtag-group">
+        <h3>Niche (5-8, less competition)</h3>
+        <div class="pills" id="pills-niche"></div>
+      </div>
+      <div class="hashtag-group">
+        <h3>Podcast-specific</h3>
+        <div class="pills" id="pills-podcast"></div>
+      </div>
+      <div class="hashtag-output" id="hashtagOutput"></div>
+      <div class="hashtag-actions">
+        <button class="btn btn-primary" onclick="copyHashtags()">Copy All</button>
+        <button class="btn btn-secondary" onclick="clearHashtags()">Clear</button>
+        <button class="btn btn-wa" onclick="shareHashtags()">WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Captions -->
+  <div class="tab-content" id="tab-captions">
+    <div class="page-header">
+      <h2>Captions</h2>
+      <div class="subtitle">Ready-made captions - tap Copy to use</div>
+    </div>
+    <div class="section-label">English / Hinglish Mix</div>
+    <div class="captions-grid" id="captionsEnglish"></div>
+    <div class="section-label">Hinglish</div>
+    <div class="captions-grid" id="captionsHinglish"></div>
+  </div>
+
+  <!-- Times -->
+  <div class="tab-content" id="tab-times">
+    <div class="page-header">
+      <h2>Best Posting Times</h2>
+      <div class="subtitle">When to post for maximum reach in India</div>
+    </div>
+    <table class="times-table">
+      <thead><tr><th>Day</th><th>Good</th><th>Peak</th></tr></thead>
+      <tbody>
+        <tr><td>Mon-Fri</td><td>7-9 AM, 12-1 PM</td><td class="peak">7-9 PM</td></tr>
+        <tr><td>Saturday</td><td>8-10 AM</td><td class="peak">7-10 PM</td></tr>
+        <tr><td>Sunday</td><td>10 AM-12 PM</td><td class="peak">7-9 PM</td></tr>
+      </tbody>
+    </table>
+    <div class="info-cards">
+      <div class="info-card">
+        <strong>Why 7-9 PM?</strong>
+        <p>This is when Indian audiences are done with dinner and scrolling through Reels. Posting here gives you the highest chance of immediate engagement, which signals the algorithm to push your content wider.</p>
+      </div>
+      <div class="info-card">
+        <strong>Engage Before Posting</strong>
+        <p>Spend 10-15 minutes engaging with similar accounts (like, comment, share) right before you post. This warms up the algorithm and tells Instagram you are an active creator.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="tab-content" id="tab-tips">
+    <div class="page-header">
+      <h2>Algorithm Tips</h2>
+      <div class="subtitle">What works on Instagram Reels right now</div>
+    </div>
+    <div class="tips-card">
+      <div class="tip-item"><span class="tip-number">1</span><span>Post every day for 30 days. Consistency is how the algorithm learns to trust your account.</span></div>
+      <div class="tip-item"><span class="tip-number">2</span><span>Watch time is king. A 15s reel watched fully beats a 60s reel watched halfway.</span></div>
+      <div class="tip-item"><span class="tip-number">3</span><span>Saves > Shares > Comments > Likes. Optimize for saves by making content people want to revisit.</span></div>
+      <div class="tip-item"><span class="tip-number">4</span><span>Use Instagram's music library. It gets better distribution than imported audio.</span></div>
+      <div class="tip-item"><span class="tip-number">5</span><span>Trending audio = free reach. Check the Reels tab for songs with an arrow icon.</span></div>
+      <div class="tip-item"><span class="tip-number">6</span><span>No watermarks ever. Instagram deprioritizes content with TikTok or other watermarks.</span></div>
+      <div class="tip-item"><span class="tip-number">7</span><span>Hashtags in first comment, not in the caption. Keeps captions clean, hashtags still work.</span></div>
+      <div class="tip-item"><span class="tip-number">8</span><span>Mix in carousel posts. The algorithm favors accounts that use multiple content formats.</span></div>
+    </div>
+    <div class="dos-donts">
+      <div class="col do">
+        <h3>Do</h3>
+        <li>Post at peak times (7-9 PM IST)</li>
+        <li>Use trending audio</li>
+        <li>Hook in the first 1-2 seconds</li>
+        <li>Add captions/subtitles always</li>
+        <li>Engage 10 min before posting</li>
+        <li>Use 15-20 hashtags per post</li>
+        <li>Reply to every comment</li>
+      </div>
+      <div class="col dont">
+        <h3>Don't</h3>
+        <li>Delete and repost (penalized)</li>
+        <li>Use TikTok watermarks</li>
+        <li>Post without captions</li>
+        <li>Ignore comments</li>
+        <li>Post blurry/low-res video</li>
+        <li>Use banned hashtags</li>
+        <li>Go silent for days then spam</li>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="tab-content" id="tab-overlay">
+    <div class="page-header">
+      <h2>Overlay Guide</h2>
+      <div class="subtitle">Where to place character, text, and captions</div>
+    </div>
+    <div class="overlay-layout">
+      <div class="phone-frame">
+        <div class="text-zone">Reaction text</div>
+        <div class="overlay-zone">Character</div>
+        <div class="caption-zone">Auto captions</div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <strong style="display:block;margin-bottom:8px;font-size:14px">Overlay Rules</strong>
+          <ul style="font-size:14px;padding-left:18px;line-height:1.8;color:var(--text-mid)">
+            <li>Position: bottom-right corner, never covering faces</li>
+            <li>Size: about 15-20% of the frame width</li>
+            <li>The chai cup must always be visible</li>
+            <li>Expression should match the clip mood</li>
+            <li>Keep it consistent for brand recognition</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong style="display:block;margin-bottom:8px;font-size:14px">Premiere Pro Setup</strong>
+          <ol style="font-size:14px;padding-left:18px;line-height:1.8;color:var(--text-mid)">
+            <li>New Sequence: 1080x1920, 30fps (vertical 9:16)</li>
+            <li>Import clip on V1, character PNG on V2</li>
+            <li>Scale + position character to bottom-right</li>
+            <li>Add text layer for reaction bubble on V3</li>
+            <li>Add auto-captions</li>
+            <li>Export: H.264, Match Source, 8-15 Mbps</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:24px">Text Bubble Reactions (tap to copy)</div>
+    <div class="reaction-group">
+      <h4>Funny</h4>
+      <div class="reaction-pills" id="react-funny"></div>
+    </div>
+    <div class="reaction-group">
+      <h4>Motivational</h4>
+      <div class="reaction-pills" id="react-motivational"></div>
+    </div>
+    <div class="reaction-group">
+      <h4>Chai Signature</h4>
+      <div class="reaction-pills" id="react-chai"></div>
+    </div>
+  </div>
+
+  <!-- 30-Day Plan -->
+  <div class="tab-content" id="tab-plan">
+    <div class="page-header">
+      <h2>30-Day Launch Plan</h2>
+      <div class="subtitle">Week-by-week goals to get Sip &amp; Slay off the ground</div>
+    </div>
+    <div class="plan-grid">
+      <div class="week-card">
+        <h3>Week 1: Find Your Rhythm</h3>
+        <div class="goal">Goal: 5 reels posted</div>
+        <ul>
+          <li>Set up Instagram creator account</li>
+          <li>Post your first reel from trending shorts</li>
+          <li>Establish your character overlay style</li>
+          <li>Post at least 5 reels by end of week</li>
+          <li>Focus on getting comfortable, not perfection</li>
+        </ul>
+      </div>
+      <div class="week-card">
+        <h3>Week 2: Improve Hooks</h3>
+        <div class="goal">Goal: 7 reels posted</div>
+        <ul>
+          <li>Study which of your reels got the most views</li>
+          <li>Focus on the first 1-2 seconds (the hook)</li>
+          <li>Try your first podcast clip edit</li>
+          <li>Experiment with different reaction text styles</li>
+          <li>Start engaging with similar accounts daily</li>
+        </ul>
+      </div>
+      <div class="week-card">
+        <h3>Week 3: Double Down</h3>
+        <div class="goal">Goal: 7 reels posted</div>
+        <ul>
+          <li>Analyze top-performing reels and replicate the formula</li>
+          <li>Mix shorts and podcast clips (2-3 podcast clips this week)</li>
+          <li>Try posting at different times, track what works</li>
+          <li>Add 1-2 carousel posts to the mix</li>
+          <li>Respond to every single comment</li>
+        </ul>
+      </div>
+      <div class="week-card">
+        <h3>Week 4: Refine and Scale</h3>
+        <div class="goal">Goal: 7-10 reels posted</div>
+        <ul>
+          <li>You now have a content formula - optimize it</li>
+          <li>Batch-create: edit 2-3 reels in one sitting</li>
+          <li>Start building a backlog of edited clips</li>
+          <li>Track followers, views, and engagement weekly</li>
+          <li>Plan for month 2: collaborations, series concepts</li>
+        </ul>
+      </div>
+    </div>
+    <div class="checkpoint">
+      <h3>Day 30 Checkpoint</h3>
+      <p>By now you should have 25+ reels posted, a consistent style, growing engagement, and a feel for what your audience likes. Review your analytics and double down on what works.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========== STATE ========== */
+var LS_WORKFLOW = 'sipandslay-workflow';
+var LS_FEEDBACK = 'sipandslay-feedback';
+var suggestions = { shorts: [], podcasts: [], suggestions: [], date: '' };
+var feedback = { picked: [], skipped: [] };
+var workflow = { editing: { short: null, podcast: null }, saved: [], posted: [] };
+var selectedHashtags = new Set();
+var serverAvailable = false;
+
+/* ========== UTILS ========== */
+function cleanTitle(t) {
+  return t.replace(/#\S+/g, '').replace(/\s{2,}/g, ' ').trim();
+}
+
+function formatViews(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
+}
+
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._tid);
+  el._tid = setTimeout(function() { el.classList.remove('show'); }, 2000);
+}
+
+function saveWorkflow() { localStorage.setItem(LS_WORKFLOW, JSON.stringify(workflow)); }
+function loadWorkflow() {
+  try {
+    var d = JSON.parse(localStorage.getItem(LS_WORKFLOW));
+    if (d) {
+      workflow = d;
+      if (!workflow.editing) workflow.editing = { short: null, podcast: null };
+      if (!workflow.saved) workflow.saved = [];
+      if (!workflow.posted) workflow.posted = [];
+    }
+  } catch(e) {}
+}
+function saveFeedback() { localStorage.setItem(LS_FEEDBACK, JSON.stringify(feedback)); }
+function loadFeedback() {
+  try { var d = JSON.parse(localStorage.getItem(LS_FEEDBACK)); if (d) feedback = d; } catch(e) {}
+}
+function getChecklistKey(videoId) { return 'sipandslay-checklist-' + videoId; }
+function saveChecklist(videoId, states) { localStorage.setItem(getChecklistKey(videoId), JSON.stringify(states)); }
+function loadChecklist(videoId, count) {
+  try { var d = JSON.parse(localStorage.getItem(getChecklistKey(videoId))); if (d && d.length === count) return d; } catch(e) {}
+  return new Array(count).fill(false);
+}
+
+/* ========== TAB SWITCHING ========== */
+function switchTab(name) {
+  document.querySelectorAll('.nav-tab').forEach(function(b) { b.classList.toggle('active', b.dataset.tab === name); });
+  document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.toggle('active', c.id === 'tab-' + name); });
+  if (name === 'queue') renderQueue();
+  if (name === 'checklist') renderChecklist();
+}
+document.querySelectorAll('.nav-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+});
+
+/* ========== SERVER API ========== */
+async function checkServer() {
+  try {
+    var r = await fetch('/api/feedback', { signal: AbortSignal.timeout(2000) });
+    if (r.ok) {
+      serverAvailable = true;
+      var data = await r.json();
+      feedback = data;
+      saveFeedback();
+      document.getElementById('serverDot').classList.add('on');
+      document.getElementById('serverLabel').textContent = 'Connected';
+    }
+  } catch(e) { serverAvailable = false; }
+}
+
+async function apiPick(item) {
+  if (serverAvailable) {
+    try { await fetch('/api/pick', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ video_id: item.id, channel_id: item.channel_id || '', keywords: [] }) }); } catch(e) {}
+  }
+  if (!feedback.picked.includes(item.id)) feedback.picked.push(item.id);
+  saveFeedback();
+}
+
+async function apiSkip(item) {
+  if (serverAvailable) {
+    try { await fetch('/api/skip', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ video_id: item.id }) }); } catch(e) {}
+  }
+  if (!feedback.skipped.includes(item.id)) feedback.skipped.push(item.id);
+  saveFeedback();
+}
+
+/* ========== PICKS RENDERING ========== */
+function renderSuggestionCard(item, idx) {
+  var isPicked = feedback.picked.includes(item.id);
+  var isSkipped = feedback.skipped.includes(item.id);
+  var cls = isPicked ? 'picked' : isSkipped ? 'skipped' : '';
+  var title = cleanTitle(item.title);
+  var angle = cleanTitle(item.angle || '');
+  var isPodcast = item.content_type === 'podcast';
+
+  var status = '';
+  if (isPicked) status = '<div class="s-status picked">Picked</div>';
+  if (isSkipped) status = '<div class="s-status skipped">Skipped</div>';
+
+  var durationHtml = isPodcast && item.duration ? ' <span class="s-duration">' + item.duration + '</span>' : '';
+
+  return '<div class="card ' + cls + '" id="card-' + item.id + '">' +
+    '<div class="s-top">' +
+      '<span class="s-rank">#' + (item.rank || idx + 1) + '</span>' +
+      '<span class="s-score">' + item.score + '</span>' +
+    '</div>' +
+    '<div class="s-title">' + title + '</div>' +
+    '<div class="s-meta">' + item.channel + ' &middot; ' + formatViews(item.views) + ' views &middot; ' + formatViews(item.likes) + ' likes' + durationHtml + '</div>' +
+    (angle ? '<div class="s-angle">' + angle + '</div>' : '') +
+    status +
+    '<div class="s-actions">' +
+      '<a class="btn btn-watch" href="' + item.url + '" target="_blank" rel="noopener">Watch</a>' +
+      '<button class="btn btn-pick" onclick="pickItem(\'' + item.id + '\')"' + (isPicked ? ' disabled' : '') + '>Pick</button>' +
+      '<button class="btn btn-skip" onclick="skipItem(\'' + item.id + '\')"' + (isSkipped ? ' disabled' : '') + '>Skip</button>' +
+      '<button class="btn btn-wa" onclick="shareOne(\'' + item.id + '\')">Share</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderPicks() {
+  document.getElementById('shortsCount').textContent = suggestions.shorts.length ? '(' + suggestions.shorts.length + ')' : '';
+  document.getElementById('podcastsCount').textContent = suggestions.podcasts.length ? '(' + suggestions.podcasts.length + ')' : '';
+  document.getElementById('shortsList').innerHTML =
+    suggestions.shorts.length ? suggestions.shorts.map(function(s, i) { return renderSuggestionCard(s, i); }).join('') :
+    '<div class="empty-state">No trending shorts today</div>';
+  document.getElementById('podcastsList').innerHTML =
+    suggestions.podcasts.length ? suggestions.podcasts.map(function(s, i) { return renderSuggestionCard(s, i); }).join('') :
+    '<div class="empty-state">No podcast picks today</div>';
+}
+
+function findItem(id) {
+  return suggestions.suggestions.find(function(s) { return s.id === id; }) ||
+         suggestions.shorts.find(function(s) { return s.id === id; }) ||
+         suggestions.podcasts.find(function(s) { return s.id === id; });
+}
+
+function pickItem(id) {
+  var item = findItem(id);
+  if (!item) return;
+  apiPick(item);
+  var exists = workflow.saved.some(function(s) { return s.id === id; }) ||
+    (workflow.editing.short && workflow.editing.short.id === id) ||
+    (workflow.editing.podcast && workflow.editing.podcast.id === id);
+  if (!exists) {
+    workflow.saved.push({ id: item.id, title: cleanTitle(item.title), channel: item.channel, url: item.url, content_type: item.content_type, duration: item.duration || '', added_at: new Date().toISOString() });
+    saveWorkflow();
+  }
+  renderPicks();
+  toast('Picked! Added to queue.');
+}
+
+function skipItem(id) {
+  var item = findItem(id);
+  if (!item) return;
+  apiSkip(item);
+  renderPicks();
+  toast('Skipped.');
+}
+
+function shareOne(id) {
+  var item = findItem(id);
+  if (!item) return;
+  var text = 'Check this out for Sip & Slay:\n' + cleanTitle(item.title) + '\n' + item.url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function shareAllPicks() {
+  var picked = suggestions.suggestions.filter(function(s) { return feedback.picked.includes(s.id); });
+  if (!picked.length) { toast('No picks yet'); return; }
+  var text = 'Sip & Slay - Today\'s Picks:\n\n';
+  picked.forEach(function(p, i) { text += (i + 1) + '. ' + cleanTitle(p.title) + '\n' + p.url + '\n\n'; });
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+/* ========== QUEUE ========== */
+function renderQueue() {
+  var editingEl = document.getElementById('editingList');
+  var editingItems = [];
+  if (workflow.editing.short) editingItems.push(workflow.editing.short);
+  if (workflow.editing.podcast) editingItems.push(workflow.editing.podcast);
+
+  editingEl.innerHTML = editingItems.length === 0 ?
+    '<div class="empty-state">Nothing being edited right now</div>' :
+    editingItems.map(function(item) {
+      return '<div class="queue-item editing-item">' +
+        '<div class="qi-top"><span class="type-pill ' + item.content_type + '">' + item.content_type.toUpperCase() + '</span><span class="qi-title">' + item.title + '</span></div>' +
+        '<div class="qi-channel">' + item.channel + (item.duration ? ' &middot; ' + item.duration : '') + '</div>' +
+        '<div class="qi-actions">' +
+          '<button class="btn btn-accent-outline" onclick="switchTab(\'checklist\')">Checklist</button>' +
+          '<button class="btn btn-pick" onclick="markPosted(\'' + item.id + '\')">Mark Posted</button>' +
+        '</div></div>';
+    }).join('');
+
+  var savedEl = document.getElementById('savedList');
+  savedEl.innerHTML = workflow.saved.length === 0 ?
+    '<div class="empty-state">Pick clips from Picks to add here</div>' :
+    workflow.saved.map(function(item) {
+      var typeSlot = item.content_type === 'podcast' ? 'podcast' : 'short';
+      var slotFull = workflow.editing[typeSlot] !== null;
+      return '<div class="queue-item">' +
+        '<div class="qi-top"><span class="type-pill ' + item.content_type + '">' + item.content_type.toUpperCase() + '</span><span class="qi-title">' + item.title + '</span></div>' +
+        '<div class="qi-channel">' + item.channel + (item.duration ? ' &middot; ' + item.duration : '') + '</div>' +
+        '<div class="qi-actions">' +
+          '<button class="btn btn-primary" onclick="startEditing(\'' + item.id + '\')"' + (slotFull ? ' disabled title="Already editing a ' + typeSlot + '"' : '') + '>Start Editing</button>' +
+          '<button class="btn btn-danger" onclick="removeFromSaved(\'' + item.id + '\')">Remove</button>' +
+        '</div></div>';
+    }).join('');
+
+  var postedEl = document.getElementById('postedList');
+  postedEl.innerHTML = workflow.posted.length === 0 ?
+    '<div class="empty-state">No posted items yet</div>' :
+    workflow.posted.map(function(item) {
+      var d = item.posted_at ? new Date(item.posted_at).toLocaleDateString() : '';
+      return '<div class="queue-item">' +
+        '<div class="qi-top"><span class="type-pill ' + item.content_type + '">' + item.content_type.toUpperCase() + '</span><span class="qi-title">' + item.title + '</span></div>' +
+        '<div class="qi-channel">' + item.channel + (d ? ' &middot; Posted ' + d : '') + '</div></div>';
+    }).join('');
+}
+
+function startEditing(id) {
+  var idx = workflow.saved.findIndex(function(s) { return s.id === id; });
+  if (idx === -1) return;
+  var item = workflow.saved[idx];
+  var typeSlot = item.content_type === 'podcast' ? 'podcast' : 'short';
+  if (workflow.editing[typeSlot] !== null) { toast('Already editing a ' + typeSlot); return; }
+  workflow.saved.splice(idx, 1);
+  workflow.editing[typeSlot] = item;
+  saveWorkflow();
+  renderQueue();
+  toast('Started editing: ' + item.title);
+}
+
+function markPosted(id) {
+  var item = null;
+  if (workflow.editing.short && workflow.editing.short.id === id) { item = workflow.editing.short; workflow.editing.short = null; }
+  else if (workflow.editing.podcast && workflow.editing.podcast.id === id) { item = workflow.editing.podcast; workflow.editing.podcast = null; }
+  if (!item) return;
+  item.posted_at = new Date().toISOString();
+  workflow.posted.unshift(item);
+  localStorage.removeItem(getChecklistKey(id));
+  localStorage.removeItem(getChecklistKey(id + '-phone'));
+  saveWorkflow();
+  renderQueue();
+  toast('Marked as posted!');
+}
+
+function removeFromSaved(id) {
+  workflow.saved = workflow.saved.filter(function(s) { return s.id !== id; });
+  saveWorkflow();
+  renderQueue();
+  toast('Removed.');
+}
+
+function toggleCollapsible(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+/* ========== CHECKLIST ========== */
+var SHORT_CHECKLIST = [
+  'Pick trending clip from suggestions',
+  'Add character overlay (bottom-right corner)',
+  'Add reaction text bubble (Hinglish)',
+  'Export (H.264, 1080x1920)',
+  'Upload to Instagram, add music + hashtags from library'
+];
+var PODCAST_CHECKLIST = [
+  'Watch full episode, find strongest 30-45s moment',
+  'Clip the moment in Premiere Pro',
+  'Set sequence to 1080x1920, 30fps (vertical 9:16)',
+  'Add captions (auto-generate, bold, centered, high contrast)',
+  'Add character overlay + context text (what the clip is about)',
+  'Export (H.264, 1080x1920, 8-15 Mbps)',
+  'Upload to Instagram, add music + hashtags'
+];
+var PHONE_CHECKLIST = [
+  'Open CapCut, import clip, set to 9:16 vertical',
+  'Trim to 30-45 seconds, add auto-captions',
+  'Add character sticker overlay (save to phone gallery)',
+  'Export and upload directly to Instagram'
+];
+
+function renderChecklist() {
+  var el = document.getElementById('checklistContent');
+  var editingShort = workflow.editing.short;
+  var editingPodcast = workflow.editing.podcast;
+  if (!editingShort && !editingPodcast) {
+    el.innerHTML = '<div class="empty-state"><h3>No clip selected</h3><p>Pick a clip from Picks, then start editing from Queue</p></div>';
+    return;
+  }
+  var html = '';
+  if (editingShort) {
+    html += renderChecklistBlock(editingShort, SHORT_CHECKLIST, 'Short Workflow (Premiere Pro)', '');
+    html += renderChecklistBlock(editingShort, PHONE_CHECKLIST, 'Quick Edit on Phone (CapCut)', '-phone');
+  }
+  if (editingPodcast) {
+    html += renderChecklistBlock(editingPodcast, PODCAST_CHECKLIST, 'Podcast Workflow (Premiere Pro)', '');
+  }
+  html += '<div class="warning-box"><strong>Important:</strong> Never delete and repost - Instagram penalizes this. If something is wrong, edit the caption or wait and post a better version next time.</div>';
+  el.innerHTML = html;
+}
+
+function renderChecklistBlock(item, steps, label, suffix) {
+  var key = item.id + suffix;
+  var states = loadChecklist(key, steps.length);
+  var done = states.filter(Boolean).length;
+  var pct = Math.round((done / steps.length) * 100);
+  var html = '<div class="checklist-banner">Editing: ' + item.title + ' <span class="type-pill ' + item.content_type + '" style="margin-left:6px">' + item.content_type.toUpperCase() + '</span></div>' +
+  '<div class="checklist-group"><h3>' + label + '</h3>' +
+  '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
+  '<div class="progress-text">' + done + '/' + steps.length + ' (' + pct + '%)</div>';
+  steps.forEach(function(step, i) {
+    var checked = states[i] ? 'checked' : '';
+    var doneClass = states[i] ? 'done' : '';
+    html += '<div class="check-item ' + doneClass + '"><input type="checkbox" ' + checked + ' onchange="toggleCheck(\'' + key + '\',' + i + ',' + steps.length + ',this.checked)"><label>' + (i + 1) + '. ' + step + '</label></div>';
+  });
+  html += '<button class="btn btn-secondary" onclick="resetChecklist(\'' + key + '\',' + steps.length + ')" style="margin-top:8px">Reset</button></div>';
+  return html;
+}
+
+function toggleCheck(key, idx, count, val) {
+  var states = loadChecklist(key, count);
+  states[idx] = val;
+  saveChecklist(key, states);
+  renderChecklist();
+}
+
+function resetChecklist(key, count) {
+  saveChecklist(key, new Array(count).fill(false));
+  renderChecklist();
+  toast('Reset.');
+}
+
+/* ========== HASHTAGS ========== */
+var HASHTAG_GROUPS = {
+  big: ['#motivation', '#empowerment', '#comedy', '#indianpodcast', '#hindipodcast', '#reels', '#trending'],
+  medium: ['#motivationalreels', '#womenempowerment', '#desimotivation', '#funnyindian', '#hindiquotes', '#podcastclips', '#indiancreator', '#desicomedy', '#motivationdaily', '#empoweringwomen'],
+  niche: ['#desiwisdom', '#indianpodcastclips', '#hindicomedy', '#reelsindia', '#womenofIndia', '#desihumor', '#podcastreels', '#indianmotivation', '#comedyreels', '#sipandslay'],
+  podcast: ['#podcastclipshindi', '#hindipodcastclips', '#podcastmoments', '#bestpodcastclips', '#podcasthighlights', '#indianinterview', '#chaipecharcha']
+};
+
+function initHashtags() {
+  Object.keys(HASHTAG_GROUPS).forEach(function(group) {
+    document.getElementById('pills-' + group).innerHTML = HASHTAG_GROUPS[group].map(function(tag) {
+      return '<span class="pill" data-tag="' + tag + '" onclick="toggleHashtag(this)">' + tag + '</span>';
+    }).join('');
+  });
+  updateHashtagDisplay();
+}
+
+function toggleHashtag(el) {
+  var tag = el.dataset.tag;
+  if (selectedHashtags.has(tag)) { selectedHashtags.delete(tag); el.classList.remove('selected'); }
+  else { if (selectedHashtags.size >= 20) { toast('Max 20 hashtags'); return; } selectedHashtags.add(tag); el.classList.add('selected'); }
+  updateHashtagDisplay();
+}
+
+function updateHashtagDisplay() {
+  var counter = document.getElementById('hashtagCounter');
+  var count = selectedHashtags.size;
+  counter.textContent = count + ' / 20 selected';
+  counter.classList.toggle('over', count > 20);
+  document.getElementById('hashtagOutput').textContent = Array.from(selectedHashtags).join(' ');
+}
+
+function copyHashtags() {
+  var text = Array.from(selectedHashtags).join(' ');
+  if (!text) { toast('No hashtags selected'); return; }
+  navigator.clipboard.writeText(text).then(function() { toast('Copied!'); });
+}
+
+function clearHashtags() {
+  selectedHashtags.clear();
+  document.querySelectorAll('.pill.selected').forEach(function(p) { p.classList.remove('selected'); });
+  updateHashtagDisplay();
+  toast('Cleared.');
+}
+
+function shareHashtags() {
+  var text = Array.from(selectedHashtags).join(' ');
+  if (!text) { toast('No hashtags'); return; }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+/* ========== CAPTIONS ========== */
+var CAPTIONS_EN = [
+  { label: 'Question Hook', text: 'Agree or disagree? Drop your take below' },
+  { label: 'Tag a Friend', text: 'Tag someone who needs to hear this today' },
+  { label: 'Save CTA', text: 'Save this for when you need a reminder' },
+  { label: 'Relatable', text: 'POV: when chai hits different after hearing this' },
+  { label: 'Signature', text: 'This deserves a second cup. What do you think?' },
+  { label: 'Debate', text: 'Is this facts or just chai talk? Tell me' },
+  { label: 'Engagement', text: 'Rate this take: 1 cup or 5 cups of chai?' },
+  { label: 'Series', text: 'Part [X] of clips that hit different with chai' }
+];
+var CAPTIONS_HI = [
+  { label: '', text: 'Yeh sunke chai thandi ho gayi. Agree?' },
+  { label: '', text: 'Mummy ne sahi bola tha. Ab samajh aaya.' },
+  { label: '', text: 'Is clip ko kitne cup doge? Comment mein batao' },
+  { label: '', text: 'Isko sun ke toh screen ko salaam karna padega' },
+  { label: '', text: 'Chai ke saath yeh suno, life set ho jayegi' },
+  { label: '', text: 'Iss podcast ka yeh moment viral hona chahiye' },
+  { label: '', text: "Queens don't need permission. They sip and slay." },
+  { label: '', text: 'Monday motivation ya everyday motivation? Sunlo' }
+];
+
+function initCaptions() {
+  document.getElementById('captionsEnglish').innerHTML = CAPTIONS_EN.map(function(c) {
+    return '<div class="caption-card"><div class="caption-text">' +
+      (c.label ? '<div class="caption-label">' + c.label + '</div>' : '') + c.text +
+      '</div><button class="btn btn-secondary" onclick="copyCaption(this)">Copy</button></div>';
+  }).join('');
+  document.getElementById('captionsHinglish').innerHTML = CAPTIONS_HI.map(function(c) {
+    return '<div class="caption-card"><div class="caption-text">' + c.text + '</div><button class="btn btn-secondary" onclick="copyCaption(this)">Copy</button></div>';
+  }).join('');
+}
+
+function copyCaption(btn) {
+  var text = btn.parentElement.querySelector('.caption-text').textContent.trim();
+  navigator.clipboard.writeText(text).then(function() { btn.textContent = 'Done'; setTimeout(function() { btn.textContent = 'Copy'; }, 1500); });
+}
+
+/* ========== REACTIONS ========== */
+var REACTIONS = {
+  funny: ['Chai toh gir gayi!', 'Ruk ja bhai...', 'Kya bol diya yaar', 'Arey wah!', 'Main toh has has ke', 'Haan bhai haan'],
+  motivational: ['Sip-worthy advice!', 'Boss energy!', 'Second cup deserved', 'Baat toh sahi hai', 'Main toh fan ho gayi', 'Sunlo sabko'],
+  chai: ['Chai pe charcha!', 'Ek aur cup chahiye', 'Yeh suno pehle', '5 cup wali clip', 'Chai thandi ho gayi']
+};
+
+function initReactions() {
+  Object.keys(REACTIONS).forEach(function(group) {
+    document.getElementById('react-' + group).innerHTML = REACTIONS[group].map(function(r) {
+      return '<span class="reaction-pill" onclick="copyReaction(this)">' + r + '</span>';
+    }).join('');
+  });
+}
+
+function copyReaction(el) {
+  navigator.clipboard.writeText(el.textContent).then(function() { toast('Copied: ' + el.textContent); });
+}
+
+/* ========== LOAD + INIT ========== */
+async function loadSuggestions() {
+  try {
+    var r = await fetch('suggestions.json');
+    if (r.ok) {
+      var data = await r.json();
+      suggestions.shorts = data.shorts || [];
+      suggestions.podcasts = data.podcasts || [];
+      suggestions.suggestions = data.suggestions || [].concat(suggestions.shorts, suggestions.podcasts);
+      suggestions.date = data.date || '';
+    }
+  } catch(e) {}
+}
+
+async function init() {
+  loadWorkflow();
+  loadFeedback();
+  await Promise.all([loadSuggestions(), checkServer()]);
+  renderPicks();
+  initHashtags();
+  initCaptions();
+  initReactions();
+  if (suggestions.date) document.getElementById('brandDate').textContent = ' - ' + suggestions.date;
+}
+
+init();
+</script>
+</body>
+</html>
