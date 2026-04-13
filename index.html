@@ -339,6 +339,30 @@ body {
   letter-spacing: 0.5px;
   margin-bottom: 12px;
 }
+.add-url-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.add-url-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.add-url-input:focus {
+  border-color: var(--accent);
+}
+.add-url-hint {
+  font-size: 12px;
+  color: var(--text-light);
+}
 .queue-item {
   background: var(--card);
   border-radius: var(--radius);
@@ -831,6 +855,14 @@ body {
       <h2>My Queue</h2>
       <div class="subtitle">Track what you're editing and what's next</div>
     </div>
+    <div class="queue-section add-url-section">
+      <div class="queue-label">Add a Video</div>
+      <div class="add-url-row">
+        <input type="text" id="addUrlInput" class="add-url-input" placeholder="Paste a YouTube link here..." autocomplete="off" />
+        <button class="btn btn-primary" onclick="addByUrl()">Add</button>
+      </div>
+      <div class="add-url-hint">Found something on YouTube? Paste the link and it goes straight to your queue.</div>
+    </div>
     <div class="queue-section">
       <div class="queue-label">Currently Editing</div>
       <div id="editingList"></div>
@@ -1104,6 +1136,10 @@ function formatViews(n) {
   return String(n);
 }
 
+function copyUrl(url) {
+  navigator.clipboard.writeText(url).then(function() { toast('URL copied!'); }).catch(function() { toast('Could not copy'); });
+}
+
 function toast(msg) {
   var el = document.getElementById('toast');
   el.textContent = msg;
@@ -1294,6 +1330,8 @@ function renderQueue() {
         '<div class="qi-top"><span class="type-pill ' + item.content_type + '">' + item.content_type.toUpperCase() + '</span><span class="qi-title">' + item.title + '</span></div>' +
         '<div class="qi-channel">' + item.channel + (item.duration ? ' &middot; ' + item.duration : '') + '</div>' +
         '<div class="qi-actions">' +
+          '<a class="btn btn-watch" href="' + item.url + '" target="_blank" rel="noopener">Watch</a>' +
+          '<button class="btn btn-secondary" onclick="copyUrl(\'' + item.url + '\')">Copy URL</button>' +
           '<button class="btn btn-primary" onclick="startEditing(\'' + item.id + '\')"' + (slotFull ? ' disabled title="Already editing a ' + typeSlot + '"' : '') + '>Start Editing</button>' +
           '<button class="btn btn-danger" onclick="removeFromSaved(\'' + item.id + '\')">Remove</button>' +
         '</div></div>';
@@ -1343,6 +1381,83 @@ function removeFromSaved(id) {
   renderQueue();
   toast('Removed.');
 }
+
+/* ========== ADD BY URL ========== */
+function parseYoutubeUrl(url) {
+  url = url.trim();
+  var m;
+  // youtube.com/watch?v=ID
+  m = url.match(/[?&]v=([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  // youtu.be/ID
+  m = url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  // youtube.com/shorts/ID
+  m = url.match(/shorts\/([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  // youtube.com/embed/ID
+  m = url.match(/embed\/([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  return null;
+}
+
+function addByUrl() {
+  var input = document.getElementById('addUrlInput');
+  var url = input.value.trim();
+  if (!url) { toast('Paste a YouTube link first'); return; }
+  var videoId = parseYoutubeUrl(url);
+  if (!videoId) { toast('Not a valid YouTube link'); return; }
+  // Check if already in queue
+  var exists = workflow.saved.some(function(s) { return s.id === videoId; }) ||
+    workflow.posted.some(function(s) { return s.id === videoId; }) ||
+    (workflow.editing.short && workflow.editing.short.id === videoId) ||
+    (workflow.editing.podcast && workflow.editing.podcast.id === videoId);
+  if (exists) { toast('Already in your queue'); input.value = ''; return; }
+  // Determine if it's a short based on URL
+  var isShort = url.indexOf('/shorts/') !== -1;
+  var canonicalUrl = isShort
+    ? 'https://www.youtube.com/shorts/' + videoId
+    : 'https://www.youtube.com/watch?v=' + videoId;
+  workflow.saved.push({
+    id: videoId,
+    title: 'Manual add - ' + videoId,
+    channel: 'From URL',
+    url: canonicalUrl,
+    content_type: isShort ? 'short' : 'podcast',
+    duration: '',
+    added_at: new Date().toISOString(),
+    manual: true
+  });
+  saveWorkflow();
+  input.value = '';
+  renderQueue();
+  toast('Added to queue!');
+  // Try to fetch the real title from oEmbed (no API key needed)
+  fetch('https://noembed.com/embed?url=' + encodeURIComponent(canonicalUrl))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.title) {
+        var item = workflow.saved.find(function(s) { return s.id === videoId; });
+        if (item) {
+          item.title = data.title;
+          if (data.author_name) item.channel = data.author_name;
+          saveWorkflow();
+          renderQueue();
+        }
+      }
+    })
+    .catch(function() {});
+}
+
+// Allow Enter key in the URL input
+document.addEventListener('DOMContentLoaded', function() {
+  var urlInput = document.getElementById('addUrlInput');
+  if (urlInput) {
+    urlInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { addByUrl(); }
+    });
+  }
+});
 
 function toggleCollapsible(el) {
   el.classList.toggle('open');
